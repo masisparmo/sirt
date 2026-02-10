@@ -513,26 +513,48 @@ function getDashboardStats() {
         let isWargaAuth = false;
         var quill;
 
-        // --- MASTER DIRECTORY MOCK (Simulasi Google Sheet Pusat) ---
-        // Format: { "id_rt": "url_gas" }
-        // Dalam implementasi nyata, ini akan di-fetch dari JSON/CSV online
+        // --- MASTER DIRECTORY ---
+
+        // 1. URL JSON API Master Sheet (DAPATKAN DARI LANGKAH DI README_ADMIN_PUSAT.md)
+        // Contoh: "https://script.google.com/macros/s/XYZ.../exec"
+        const MASTER_API_URL = "";
+
+        // 2. Data Mock (Cadangan jika API belum disetting / gagal)
         const MOCK_MASTER_DIR = {
             "RT01-DEMO": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec",
-            "RT08-PPI": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec" // Contoh mapping ke URL sama
+            "RT08-PPI": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec"
         };
 
         async function fetchMasterDirectory(id) {
-            // Simulasi network delay
-            await new Promise(r => setTimeout(r, 800));
-
             const normalizedId = id.toUpperCase().trim();
-            if (MOCK_MASTER_DIR[normalizedId]) {
-                return MOCK_MASTER_DIR[normalizedId];
+            let foundUrl = null;
+
+            // COBA FETCH DARI API MASTER (Jika URL sudah diisi)
+            if (MASTER_API_URL && MASTER_API_URL.length > 10) {
+                try {
+                    const response = await fetch(MASTER_API_URL);
+                    if (response.ok) {
+                        const directory = await response.json();
+                        if (directory && directory[normalizedId]) {
+                            foundUrl = directory[normalizedId];
+                        }
+                    }
+                } catch (e) {
+                    console.error("Gagal mengambil Master Directory dari API:", e);
+                    // Lanjut ke Mock jika gagal
+                }
             }
-            // Disini nanti logic fetch real ke Google Sheet Pusat Anda
-            // const dir = await fetch('URL_MASTER_SHEET_JSON').then(r=>r.json());
-            // return dir[normalizedId];
-            return null;
+
+            // JIKA TIDAK KETEMU DI API, CEK MOCK (Fallback)
+            if (!foundUrl) {
+                // Simulasi delay biar terasa 'loading'
+                await new Promise(r => setTimeout(r, 800));
+                if (MOCK_MASTER_DIR[normalizedId]) {
+                    foundUrl = MOCK_MASTER_DIR[normalizedId];
+                }
+            }
+
+            return foundUrl;
         }
 
         // MOCK DATA FOR DEMO
