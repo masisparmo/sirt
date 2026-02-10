@@ -535,8 +535,11 @@ function getDashboardStats() {
                     const response = await fetch(MASTER_API_URL);
                     if (response.ok) {
                         const directory = await response.json();
-                        if (directory && directory[normalizedId]) {
-                            foundUrl = directory[normalizedId];
+                        if (directory) {
+                            // Case-insensitive search
+                            const keys = Object.keys(directory);
+                            const match = keys.find(k => k.toUpperCase().trim() === normalizedId);
+                            if (match) foundUrl = directory[match];
                         }
                     }
                 } catch (e) {
