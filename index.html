@@ -129,10 +129,10 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-indigo-500 flex justify-between"><div><p class="text-xs text-gray-500 uppercase font-bold pt-1">Total Penduduk</p><h3 class="text-2xl font-bold mt-1 text-indigo-600" id="stat-warga">0</h3></div><div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 self-center"><i class="fa-solid fa-users"></i></div></div>
-                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-blue-500 flex justify-between"><div><p class="text-xs text-gray-500 uppercase font-bold pt-1">Total Pemasukan</p><h3 class="text-2xl font-bold mt-1 text-blue-600" id="stat-masuk">Rp 0</h3></div><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 self-center"><i class="fa-solid fa-arrow-down"></i></div></div>
-                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-red-500 flex justify-between"><div><p class="text-xs text-gray-500 uppercase font-bold pt-1">Total Pengeluaran</p><h3 class="text-2xl font-bold mt-1 text-red-600" id="stat-keluar">Rp 0</h3></div><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 self-center"><i class="fa-solid fa-arrow-up"></i></div></div>
-                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-green-500 flex justify-between"><div><p class="text-xs text-gray-500 uppercase font-bold pt-1">Saldo Kas RT</p><h3 class="text-2xl font-bold mt-1 text-green-600" id="stat-saldo">Rp 0</h3></div><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 self-center"><i class="fa-solid fa-wallet"></i></div></div>
+                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-indigo-500 relative"><div><p class="text-xs text-gray-500 uppercase font-bold">Total Penduduk</p><h3 class="text-2xl font-bold mt-1 text-indigo-600 pt-1" id="stat-warga">0</h3></div><div class="absolute top-6 right-6 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600"><i class="fa-solid fa-users"></i></div></div>
+                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-blue-500 relative"><div><p class="text-xs text-gray-500 uppercase font-bold">Total Pemasukan</p><h3 class="text-2xl font-bold mt-1 text-blue-600 pt-1" id="stat-masuk">Rp 0</h3></div><div class="absolute top-6 right-6 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa-solid fa-arrow-down"></i></div></div>
+                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-red-500 relative"><div><p class="text-xs text-gray-500 uppercase font-bold">Total Pengeluaran</p><h3 class="text-2xl font-bold mt-1 text-red-600 pt-1" id="stat-keluar">Rp 0</h3></div><div class="absolute top-6 right-6 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600"><i class="fa-solid fa-arrow-up"></i></div></div>
+                        <div class="bg-white py-8 px-6 rounded-xl shadow-sm border-l-4 border-green-500 relative"><div><p class="text-xs text-gray-500 uppercase font-bold">Saldo Kas RT</p><h3 class="text-2xl font-bold mt-1 text-green-600 pt-1" id="stat-saldo">Rp 0</h3></div><div class="absolute top-6 right-6 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600"><i class="fa-solid fa-wallet"></i></div></div>
                     </div>
                 </div>
 
@@ -214,6 +214,24 @@
                             <div class="flex justify-end pt-2"><button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan Konfigurasi</button></div>
                         </form>
                     </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-6 border border-yellow-100">
+                        <h3 class="font-bold text-lg mb-4 text-yellow-700">Manajemen Data Aplikasi</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="showInputUrl()" class="w-full py-3 border border-slate-300 rounded text-slate-700 font-bold hover:bg-slate-50 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-link"></i> Update URL Database
+                            </button>
+                            <button onclick="exportData()" class="w-full py-3 bg-green-50 text-green-700 rounded border border-green-200 font-bold hover:bg-green-100 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-export"></i> Backup Konfigurasi (.sirt)
+                            </button>
+                            <button onclick="triggerImport()" class="w-full py-3 bg-blue-50 text-blue-700 rounded border border-blue-200 font-bold hover:bg-blue-100 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-import"></i> Restore Konfigurasi
+                            </button>
+                            <button onclick="doFactoryReset()" class="w-full py-3 bg-red-50 text-red-700 rounded border border-red-200 font-bold hover:bg-red-100 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-trash-can"></i> Reset Aplikasi
+                            </button>
+                        </div>
+                    </div>
                     <div class="bg-white rounded-xl shadow-sm overflow-hidden p-6 mb-6">
                         <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg">Daftar Admin</h3><button onclick="openModal('modal-add-user')" class="bg-slate-700 text-white px-3 py-1 rounded text-sm"><i class="fa-solid fa-plus"></i> Admin Baru</button></div>
                         <table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600 uppercase text-xs"><tr><th class="p-3">Username</th><th class="p-3">Nama</th><th class="p-3 text-right">Aksi</th></tr></thead><tbody id="table-users-body" class="divide-y divide-gray-100"></tbody></table>
@@ -222,7 +240,20 @@
                 </div>
 
                 <div id="page-help" class="page-content hidden">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Panduan Instalasi & Kode Backend</h2>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Panduan Instalasi & Registrasi RT</h2>
+
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 mb-8">
+                        <h3 class="font-bold text-lg text-blue-800 mb-2">Cara Mendapatkan ID RT (Link Khusus)</h3>
+                        <p class="text-sm text-gray-700 mb-4">Agar warga RT Anda dapat mengakses aplikasi ini dengan mudah menggunakan link khusus (misal: <code>sirt-pintar.github.io/?id=rt01-kalisari</code>), Anda perlu mendaftarkan database Anda ke Master Direktori.</p>
+                        <ol class="list-decimal list-inside text-sm text-gray-700 space-y-2">
+                            <li>Lakukan langkah instalasi backend (Poin 1-3 di bawah) sampai mendapatkan <strong>URL Web App</strong>.</li>
+                            <li>Hubungi Admin Pusat SIRT Pintar untuk pendaftaran.</li>
+                            <li>Berikan <strong>Nama RT/Kelurahan</strong> dan <strong>URL Web App</strong> Anda.</li>
+                            <li>Admin akan memberikan <strong>ID RT</strong> (misal: <code>rt01-kalisari</code>).</li>
+                            <li>Bagikan link <code>https://sirt-pintar.github.io/?id=rt01-kalisari</code> kepada warga.</li>
+                        </ol>
+                    </div>
+
                     <div class="space-y-8">
                         <div class="relative pl-8 border-l-4 border-green-500">
                             <div class="absolute -left-3 top-0 bg-green-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</div>
@@ -410,6 +441,52 @@ function getDashboardStats() {
         </div>
     </div>
 
+        <!-- SETUP MODAL -->
+    <div id="modal-setup" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-[70] p-4">
+        <div class="bg-white rounded-xl p-8 w-full max-w-lg shadow-2xl text-center">
+            <div class="mb-4 text-blue-600 text-5xl"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Selamat Datang di SIRT Pintar</h3>
+            <p class="text-gray-600 mb-6">Aplikasi belum terhubung. Masukkan ID RT atau URL Database.</p>
+
+            <div class="space-y-3">
+                <form onsubmit="handleIdLogin(event)" class="relative">
+                    <div class="flex gap-2">
+                        <input id="input-rt-id" name="rt_id" type="text" placeholder="Masukkan ID RT (Cth: rt08-ppi)" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none uppercase font-bold text-center tracking-wider">
+                        <button type="submit" class="bg-blue-600 text-white px-6 rounded-lg font-bold hover:bg-blue-700 whitespace-nowrap"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </form>
+                <div class="text-center text-gray-400 text-xs py-2">- ATAU -</div>
+                <button onclick="startDemoMode()" class="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:shadow-lg font-bold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-gamepad"></i> Mode Demo (Gratis)
+                </button>
+                <button onclick="showInputUrl()" class="w-full py-3 border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 font-bold transition flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-code"></i> Input Manual URL (Advanced)
+                </button>
+            </div>
+            <div class="mt-6 text-xs text-gray-400">
+                Ingin mendaftarkan RT Anda? <a href="#" onclick="showPage('help'); closeModal('modal-setup');" class="text-blue-500 hover:underline">Hubungi Admin Pusat</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT URL MODAL -->
+    <div id="modal-input-url" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-[75] p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Konfigurasi Database</h3>
+            <form onsubmit="saveGasUrl(event)">
+                <label class="block text-sm font-bold text-gray-700 mb-2">URL Google Apps Script (Web App)</label>
+                <input id="input-gas-url" type="url" placeholder="https://script.google.com/macros/s/..." required class="w-full p-3 border rounded-lg mb-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-input-url'); openModal('modal-setup');" class="px-4 py-2 text-gray-600">Kembali</button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Simpan & Hubungkan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <input type="file" id="file-import" accept=".sirt" class="hidden" onchange="handleFileImport(this)">
+
+
     <!-- GLOBAL PROGRESS POPUP -->
     <div id="progress-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-[60]"><div class="bg-white rounded-2xl p-8 w-80 text-center shadow-2xl transform transition-all scale-100"><div id="progress-icon" class="mb-4 text-5xl"><i class="fa-solid fa-circle-notch fa-spin text-blue-500"></i></div><h3 id="progress-title" class="text-xl font-bold text-slate-800 mb-2">Memproses...</h3><p id="progress-message" class="text-gray-500 text-sm mb-6">Mohon tunggu sebentar.</p><div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden relative"><div id="progress-bar" class="h-4 rounded-full w-0 progress-bar-stripe bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 transition-all duration-300"></div></div><button id="progress-close-btn" onclick="closeProgress()" class="mt-6 bg-slate-800 text-white px-6 py-2 rounded-full text-sm font-bold hidden hover:bg-slate-900 transition">Tutup</button></div></div>
     
@@ -426,17 +503,272 @@ function getDashboardStats() {
 
     <div id="modal-add-user" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"><div class="bg-white rounded-xl w-full max-w-md p-6"><h3 class="font-bold text-lg mb-4">Tambah Admin</h3><form onsubmit="submitData(event, 'addUser')"><input name="nama" type="text" placeholder="Nama Lengkap" required class="w-full mb-3 p-2 border rounded"><input name="username" type="text" placeholder="Username" required class="w-full mb-3 p-2 border rounded"><input name="password" type="text" placeholder="Password" required class="w-full mb-3 p-2 border rounded"><div class="flex justify-end gap-2"><button type="button" onclick="closeModal('modal-add-user')" class="px-4 py-2 text-gray-600">Batal</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button></div></form></div></div>
 
+    <script src="db.js"></script>
     <script>
-        // URL OTOMATIS DARI CONTEXT
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec"; 
+        // GLOBAL VARIABLES
+        let GAS_API_URL = null;
+        let IS_DEMO = false;
+        let localWarga = [];
+        let currentUser = null;
+        let isWargaAuth = false;
+        var quill;
 
-        let localWarga = []; let currentUser = null; let isWargaAuth = false; var quill;
-
-        window.onload = function() {
-            checkSession(); 
-            loadAllData(true);
-            quill = new Quill('#editor-container', { theme: 'snow', modules: { toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]] }, placeholder: 'Tulis isi pengumuman...' });
+        // --- MASTER DIRECTORY MOCK (Simulasi Google Sheet Pusat) ---
+        // Format: { "id_rt": "url_gas" }
+        // Dalam implementasi nyata, ini akan di-fetch dari JSON/CSV online
+        const MOCK_MASTER_DIR = {
+            "RT01-DEMO": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec",
+            "RT08-PPI": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec" // Contoh mapping ke URL sama
         };
+
+        async function fetchMasterDirectory(id) {
+            // Simulasi network delay
+            await new Promise(r => setTimeout(r, 800));
+
+            const normalizedId = id.toUpperCase().trim();
+            if (MOCK_MASTER_DIR[normalizedId]) {
+                return MOCK_MASTER_DIR[normalizedId];
+            }
+            // Disini nanti logic fetch real ke Google Sheet Pusat Anda
+            // const dir = await fetch('URL_MASTER_SHEET_JSON').then(r=>r.json());
+            // return dir[normalizedId];
+            return null;
+        }
+
+        // MOCK DATA FOR DEMO
+        const DEMO_DATA = {
+            stats: { totalWarga: 15, totalMasuk: "Rp 2.500.000", totalKeluar: "Rp 1.200.000", saldo: "Rp 1.300.000" },
+            pengumuman: [
+                { id: "P-1", tanggal: "01/01/2024", judul: "Kerja Bakti Minggu Ini", isi: "<p>Diharapkan kehadiran bapak/ibu warga RT 01 untuk kerja bakti membersihkan selokan.</p>" },
+                { id: "P-2", tanggal: "05/01/2024", judul: "Jadwal Ronda Baru", isi: "<p>Berikut adalah jadwal ronda bulan Januari. Silakan cek di pos kamling.</p>" }
+            ],
+            warga: [
+                { id: "W-1", nama: "Budi Santoso", rumah: "A1/01", hp: "081234567890", anggota: 4, email: "budi@example.com" },
+                { id: "W-2", nama: "Siti Aminah", rumah: "A1/02", hp: "081298765432", anggota: 3, email: "siti@example.com" },
+                { id: "W-3", nama: "Demo User", rumah: "B2/10", hp: "-", anggota: 2, email: "-" }
+            ],
+            transaksi: [
+                { id: "T-1", tanggal: "02/01/2024", nama: "Budi Santoso", jenis: "Iuran Bulanan", nominal: 50000, tipe: "Masuk" },
+                { id: "T-2", tanggal: "03/01/2024", nama: "Pembelian Sapu", jenis: "Operasional", nominal: 25000, tipe: "Keluar" }
+            ],
+            config: { judul_web: "RT 01 Demo", subjudul_web: "Mode Demo Aplikasi", warga_code: "12345", wa_rt: "628123456789" },
+            users: [
+                { username: "admin", role: "admin", nama: "Super Admin" },
+                { username: "demo", role: "admin", nama: "Demo Admin" }
+            ]
+        };
+
+        window.onload = async function() {
+            quill = new Quill('#editor-container', { theme: 'snow', modules: { toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]] }, placeholder: 'Tulis isi pengumuman...' });
+
+            await initApp();
+        };
+
+        async function initApp() {
+            // 1. Cek URL Parameter (?id=...)
+            const urlParams = new URLSearchParams(window.location.search);
+            const rtId = urlParams.get('id');
+
+            if (rtId) {
+                // Auto-login logic via ID
+                showProgress("Menghubungkan", "Mencari ID RT: " + rtId);
+                const gasUrl = await fetchMasterDirectory(rtId);
+
+                if (gasUrl) {
+                    await saveConfig('GAS_URL', gasUrl);
+                    await saveConfig('RT_ID', rtId.toUpperCase());
+                    GAS_API_URL = gasUrl;
+                    finishProgress(true, "Terhubung!");
+                    // Bersihkan URL agar rapi
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    setTimeout(() => window.location.reload(), 1000);
+                    return;
+                } else {
+                    finishProgress(false, "ID RT tidak ditemukan di Master Direktori.");
+                    await new Promise(r => setTimeout(r, 2000));
+                    closeProgress();
+                }
+            }
+
+            // 2. Check IndexedDB for Existing Config
+            try {
+                const url = await getConfig('GAS_URL');
+                if (url) {
+                    GAS_API_URL = url;
+                    checkSession();
+                    loadAllData(true);
+                } else {
+                    if (sessionStorage.getItem('demo_mode') === 'true') {
+                        startDemoMode(true);
+                    } else {
+                        openModal('modal-setup');
+                    }
+                }
+            } catch (e) {
+                console.error("DB Init Error", e);
+                alert("Gagal inisialisasi database browser.");
+            }
+        }
+
+        async function handleIdLogin(e) {
+            e.preventDefault();
+            const id = document.getElementById('input-rt-id').value.trim();
+            if(!id) return;
+
+            showProgress("Koneksi", "Mencari Database RT...");
+            const url = await fetchMasterDirectory(id);
+
+            if(url) {
+                await saveConfig('GAS_URL', url);
+                await saveConfig('RT_ID', id.toUpperCase());
+                finishProgress(true, "Berhasil Ditemukan!");
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                finishProgress(false, "ID RT Tidak Terdaftar.");
+            }
+        }
+
+        function startDemoMode(skipModal = false) {
+            IS_DEMO = true;
+            sessionStorage.setItem('demo_mode', 'true');
+            if(!skipModal) closeModal('modal-setup');
+
+            if(confirm("Masuk sebagai Admin Demo? (Klik Cancel untuk masuk sebagai Warga)")) {
+                currentUser = { isLoggedIn: true, username: 'demo', role: 'admin', nama: 'Demo Admin' };
+                updateUIForAdmin();
+            } else {
+                // alert("Anda masuk sebagai Warga (View Only). Data yang tampil adalah CONTOH.");
+            }
+
+            loadAllData(true);
+            document.getElementById('header-subtitle').innerHTML = '<span class="bg-yellow-300 text-black px-2 rounded font-bold">MODE DEMO</span>';
+        }
+
+        function showInputUrl() {
+            closeModal('modal-setup');
+            openModal('modal-input-url');
+        }
+
+        async function saveGasUrl(e) {
+            e.preventDefault();
+            const url = document.getElementById('input-gas-url').value.trim();
+            if (!url.startsWith('https://script.google.com/')) {
+                alert("URL tidak valid! Harus berawalan https://script.google.com/...");
+                return;
+            }
+
+            showProgress("Menyimpan", "Verifikasi URL...");
+            try {
+                const test = await fetch(`${url}?action=getAppConfig`).then(r => r.json());
+                if (test) {
+                    await saveConfig('GAS_URL', url);
+                    GAS_API_URL = url;
+                    finishProgress(true, "Terhubung!");
+                    closeModal('modal-input-url');
+                    setTimeout(() => window.location.reload(), 1000);
+                }
+            } catch (err) {
+                finishProgress(false, "Gagal Terhubung. Pastikan URL benar dan deployment 'Anyone'.");
+            }
+        }
+
+        function triggerImport() { document.getElementById('file-import').click(); }
+        async function handleFileImport(input) {
+            if (input.files.length === 0) return;
+            showProgress("Import", "Membaca file...");
+            try {
+                await importData(input.files[0]);
+                finishProgress(true, "Data Loaded!");
+                setTimeout(() => window.location.reload(), 1000);
+            } catch (e) {
+                finishProgress(false, "Gagal Import File.");
+            }
+        }
+
+        async function doFactoryReset() {
+            if(confirm("HAPUS SEMUA KONFIGURASI? Aplikasi akan kembali ke pengaturan awal.")) {
+                await clearDB();
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location.href = window.location.pathname; // Reload clear query params
+            }
+        }
+
+        // --- FETCH & LOAD LOGIC ---
+
+        async function loadAllData(init = false) {
+            if (IS_DEMO) {
+                renderDemoData();
+                if(init) closeProgress();
+                return;
+            }
+
+            try {
+                if(init) showProgress("Loading", "Memuat Data...");
+                const t = new Date().getTime();
+                const ac = currentUser ? 'getAdminConfig' : 'getAppConfig';
+
+                const [stats, pengumuman, warga, trans, config] = await Promise.all([
+                    fetch(`${GAS_API_URL}?action=getDashboard&_t=${t}`).then(r=>r.json()),
+                    fetch(`${GAS_API_URL}?action=getPengumuman&_t=${t}`).then(r=>r.json()),
+                    fetch(`${GAS_API_URL}?action=getWarga&_t=${t}`).then(r=>r.json()),
+                    fetch(`${GAS_API_URL}?action=getTransaksi&_t=${t}`).then(r=>r.json()),
+                    fetch(`${GAS_API_URL}?action=${ac}&_t=${t}`).then(r=>r.json())
+                ]);
+
+                updateAppConfig(config);
+                updateStats(stats);
+                renderPengumuman(pengumuman);
+                localWarga = warga;
+                renderWarga(warga);
+                renderTransaksi(trans);
+
+                if(init) closeProgress();
+            } catch(e) {
+                if(init) {
+                    closeProgress();
+                    // Auto fallback to setup if URL invalid
+                    if(confirm("Gagal memuat database RT. Periksa koneksi internet atau URL Database.\n\nKlik OK untuk masuk Mode Demo sementara.")) {
+                        startDemoMode();
+                    } else {
+                        openModal('modal-setup');
+                    }
+                }
+                console.error(e);
+            }
+        }
+
+        function renderDemoData() {
+            updateAppConfig(DEMO_DATA.config);
+            updateStats(DEMO_DATA.stats);
+            renderPengumuman(DEMO_DATA.pengumuman);
+            localWarga = DEMO_DATA.warga;
+            renderWarga(DEMO_DATA.warga);
+            renderTransaksi(DEMO_DATA.transaksi);
+        }
+
+        function updateAppConfig(config) {
+            if(!config) return;
+            if(config.judul_web) { document.getElementById('header-title').innerText = config.judul_web; document.title = config.judul_web; if(document.getElementById('conf-judul')) document.getElementById('conf-judul').value = config.judul_web; }
+            if(config.subjudul_web) { document.getElementById('header-subtitle').innerText = config.subjudul_web; if(document.getElementById('conf-subjudul')) document.getElementById('conf-subjudul').value = config.subjudul_web; }
+            if(config.warga_code && document.getElementById('conf-warga-code')) document.getElementById('conf-warga-code').value = config.warga_code;
+            if(config.wa_rt) { let c = String(config.wa_rt).replace(/\D/g, ''); if(c.startsWith('0')) c = '62'+c.slice(1); document.getElementById('btn-lapor-wa').href = `https://wa.me/${c}`; if(document.getElementById('conf-wa-rt')) document.getElementById('conf-wa-rt').value = config.wa_rt; }
+
+            // Save config to DB for export
+            if(config.judul_web) saveConfig('rt', config.judul_web);
+            if(config.subjudul_web) saveConfig('kelurahan', config.subjudul_web);
+        }
+
+        function updateStats(stats) {
+            if(stats.totalWarga !== undefined) {
+                if(document.getElementById('stat-warga')) document.getElementById('stat-warga').innerText = stats.totalWarga;
+                if(document.getElementById('stat-masuk')) document.getElementById('stat-masuk').innerText = stats.totalMasuk || "Rp 0";
+                if(document.getElementById('stat-keluar')) document.getElementById('stat-keluar').innerText = stats.totalKeluar || "Rp 0";
+                if(document.getElementById('stat-saldo')) document.getElementById('stat-saldo').innerText = stats.saldo || "Rp 0";
+                if(document.getElementById('keuangan-total-masuk')) document.getElementById('keuangan-total-masuk').innerText = stats.totalMasuk || "Rp 0";
+                if(document.getElementById('keuangan-total-keluar')) document.getElementById('keuangan-total-keluar').innerText = stats.totalKeluar || "Rp 0";
+            }
+        }
 
         function handleImageUpload() {
             let url = prompt("Tempel Link Gambar atau HTML Embed dari ImgBB:");
@@ -471,28 +803,11 @@ function getDashboardStats() {
         
         function doLogout() {
             if(confirm("Keluar dari sistem?")) {
-                // Clear session
                 localStorage.removeItem('rt_user');
                 sessionStorage.removeItem('warga_access');
+                sessionStorage.removeItem('demo_mode');
                 currentUser = null;
-                
-                // Reset UI manually
-                document.body.classList.remove('is-admin');
-                document.getElementById('btn-login').classList.remove('hidden');
-                document.getElementById('btn-logout').classList.add('hidden');
-                document.getElementById('user-info').classList.add('hidden');
-                document.getElementById('admin-badge').classList.add('hidden');
-                
-                // Relock everything
-                document.getElementById('public-income-msg').style.display = 'block';
-                document.getElementById('warga-lock-screen').classList.remove('hidden');
-                document.getElementById('warga-data-container').classList.add('hidden');
-                document.getElementById('income-lock-screen').classList.remove('hidden');
-                document.getElementById('income-data-container').classList.add('hidden');
-                
-                // Go to dashboard and reload
-                showPage('dashboard');
-                setTimeout(function() { window.location.reload(); }, 500);
+                window.location.reload();
             }
         }
 
@@ -508,6 +823,18 @@ function getDashboardStats() {
             const usernameInput = document.getElementById('login-username').value.trim();
             const passwordInput = document.getElementById('login-password').value.trim();
             const d = {username: usernameInput, password: passwordInput};
+
+            // DEMO LOGIN
+            if (IS_DEMO) {
+                if (usernameInput === 'demo' && passwordInput === 'demo') {
+                    localStorage.setItem('rt_user', JSON.stringify({ isLoggedIn: true, username: 'demo', role: 'admin', nama: 'Demo Admin' }));
+                    currentUser = { isLoggedIn: true, username: 'demo', role: 'admin', nama: 'Demo Admin' };
+                    updateUIForAdmin(); closeModal('modal-login'); alert("Login Demo Berhasil!"); loadAllData();
+                } else {
+                    alert("Demo Login: Gunakan user 'demo' dan password 'demo'");
+                }
+                return;
+            }
 
             showProgress("Login", "Verifikasi..."); 
             try { 
@@ -527,37 +854,54 @@ function getDashboardStats() {
             } 
         }
 
-        async function submitWargaAuth(e) { e.preventDefault(); const c = e.target.warga_code.value.trim(); showProgress("Cek Kode", "Tunggu..."); try { const r = await fetch(`${GAS_API_URL}?action=verifyWargaCode`, { method: 'POST', body: JSON.stringify({code: c}) }).then(res=>res.json()); if(r.success) { sessionStorage.setItem('warga_access', 'true'); isWargaAuth = true; showWargaData(); updateIncomeView(); finishProgress(true, "Akses Diberikan"); } else finishProgress(false, "Kode Salah"); } catch(err) { finishProgress(false, "Error"); } }
+        async function submitWargaAuth(e) { e.preventDefault(); const c = e.target.warga_code.value.trim();
+            if(IS_DEMO) {
+                if(c === '12345') { sessionStorage.setItem('warga_access', 'true'); isWargaAuth = true; showWargaData(); updateIncomeView(); alert("Akses Demo Diberikan"); }
+                else alert("Kode Demo: 12345");
+                return;
+            }
+            showProgress("Cek Kode", "Tunggu..."); try { const r = await fetch(`${GAS_API_URL}?action=verifyWargaCode`, { method: 'POST', body: JSON.stringify({code: c}) }).then(res=>res.json()); if(r.success) { sessionStorage.setItem('warga_access', 'true'); isWargaAuth = true; showWargaData(); updateIncomeView(); finishProgress(true, "Akses Diberikan"); } else finishProgress(false, "Kode Salah"); } catch(err) { finishProgress(false, "Error"); }
+        }
         function showWargaData() { document.getElementById('warga-lock-screen').classList.add('hidden'); document.getElementById('warga-data-container').classList.remove('hidden'); }
-        async function submitConfig(e) { e.preventDefault(); const d = Object.fromEntries(new FormData(e.target).entries()); showProgress("Simpan", "Menyimpan..."); try { const r = await fetch(`${GAS_API_URL}?action=saveAppConfig`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json()); finishProgress(r.success, r.message); if(r.success) loadAllData(); } catch(e) { finishProgress(false, "Error"); } }
-        async function submitData(e, action) { e.preventDefault(); if(action==='simpanPengumuman') document.getElementById('input-isi-pengumuman').value = quill.root.innerHTML; const d = Object.fromEntries(new FormData(e.target).entries()); showProgress("Simpan", "Mengirim..."); try { const r = await fetch(`${GAS_API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json()); finishProgress(r.success, r.message); if(r.success) { closeModal(e.target.closest('div[id^="modal"]').id); if(action.includes('User')) loadUsers(); else loadAllData(); } } catch(e) { finishProgress(false, "Error"); } }
-        async function hapusData(action, id) { if(!confirm("Hapus?")) return; showProgress("Hapus", "Memproses..."); try { const r = await fetch(`${GAS_API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify({id: id}) }).then(res=>res.json()); finishProgress(r.success, r.message); loadAllData(); } catch(e) { finishProgress(false, "Error"); } }
-        
-        async function loadAllData(init = false) {
-            try { if(init) showProgress("Loading", "Memuat Data..."); const t = new Date().getTime(); const ac = currentUser ? 'getAdminConfig' : 'getAppConfig';
-            const [stats, pengumuman, warga, trans, config] = await Promise.all([ fetch(`${GAS_API_URL}?action=getDashboard&_t=${t}`).then(r=>r.json()), fetch(`${GAS_API_URL}?action=getPengumuman&_t=${t}`).then(r=>r.json()), fetch(`${GAS_API_URL}?action=getWarga&_t=${t}`).then(r=>r.json()), fetch(`${GAS_API_URL}?action=getTransaksi&_t=${t}`).then(r=>r.json()), fetch(`${GAS_API_URL}?action=${ac}&_t=${t}`).then(r=>r.json()) ]);
-            
-            if(config) {
-                if(config.judul_web) { document.getElementById('header-title').innerText = config.judul_web; document.title = config.judul_web; if(document.getElementById('conf-judul')) document.getElementById('conf-judul').value = config.judul_web; }
-                if(config.subjudul_web) { document.getElementById('header-subtitle').innerText = config.subjudul_web; if(document.getElementById('conf-subjudul')) document.getElementById('conf-subjudul').value = config.subjudul_web; }
-                if(config.warga_code && document.getElementById('conf-warga-code')) document.getElementById('conf-warga-code').value = config.warga_code;
-                if(config.wa_rt) { let c = String(config.wa_rt).replace(/\D/g, ''); if(c.startsWith('0')) c = '62'+c.slice(1); document.getElementById('btn-lapor-wa').href = `https://wa.me/${c}`; if(document.getElementById('conf-wa-rt')) document.getElementById('conf-wa-rt').value = config.wa_rt; }
+        async function submitConfig(e) { e.preventDefault();
+            if(IS_DEMO) { alert("Mode Demo: Konfigurasi tidak disimpan."); return; }
+            const d = Object.fromEntries(new FormData(e.target).entries()); showProgress("Simpan", "Menyimpan..."); try { const r = await fetch(`${GAS_API_URL}?action=saveAppConfig`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json()); finishProgress(r.success, r.message); if(r.success) loadAllData(); } catch(e) { finishProgress(false, "Error"); }
+        }
+        async function submitData(e, action) { e.preventDefault();
+            if(IS_DEMO) {
+                alert("Mode Demo: Data tidak disimpan ke server.");
+                closeModal(e.target.closest('div[id^="modal"]').id);
+                if(action === 'simpanPengumuman') {
+                    const title = e.target.judul.value;
+                    const content = quill.root.innerHTML;
+                    DEMO_DATA.pengumuman.unshift({id:`P-${Date.now()}`, tanggal: "Hari Ini", judul: title, isi: content});
+                }
+                loadAllData();
+                return;
             }
-            if(stats.totalWarga !== undefined) { 
-                if(document.getElementById('stat-warga')) document.getElementById('stat-warga').innerText = stats.totalWarga; 
-                if(document.getElementById('stat-masuk')) document.getElementById('stat-masuk').innerText = stats.totalMasuk || "Rp 0"; 
-                if(document.getElementById('stat-keluar')) document.getElementById('stat-keluar').innerText = stats.totalKeluar || "Rp 0"; 
-                if(document.getElementById('stat-saldo')) document.getElementById('stat-saldo').innerText = stats.saldo || "Rp 0"; 
-                if(document.getElementById('keuangan-total-masuk')) document.getElementById('keuangan-total-masuk').innerText = stats.totalMasuk || "Rp 0"; 
-                if(document.getElementById('keuangan-total-keluar')) document.getElementById('keuangan-total-keluar').innerText = stats.totalKeluar || "Rp 0"; 
-            }
-            
-            renderPengumuman(pengumuman); localWarga = warga; renderWarga(warga); renderTransaksi(trans); if(init) closeProgress();
-            } catch(e) { if(init) finishProgress(false, "Gagal Memuat: Cek URL Anda"); console.error(e); }
+            if(action==='simpanPengumuman') document.getElementById('input-isi-pengumuman').value = quill.root.innerHTML; const d = Object.fromEntries(new FormData(e.target).entries()); showProgress("Simpan", "Mengirim..."); try { const r = await fetch(`${GAS_API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json()); finishProgress(r.success, r.message); if(r.success) { closeModal(e.target.closest('div[id^="modal"]').id); if(action.includes('User')) loadUsers(); else loadAllData(); } } catch(e) { finishProgress(false, "Error"); }
+        }
+        async function hapusData(action, id) { if(!confirm("Hapus?")) return;
+            if(IS_DEMO) { alert("Mode Demo: Data dihapus dari tampilan saja."); return; }
+            showProgress("Hapus", "Memproses..."); try { const r = await fetch(`${GAS_API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify({id: id}) }).then(res=>res.json()); finishProgress(r.success, r.message); loadAllData(); } catch(e) { finishProgress(false, "Error"); }
         }
 
-        async function loadUsers() { const u = await fetch(`${GAS_API_URL}?action=getUsers`).then(r=>r.json()); const b = document.getElementById('table-users-body'); b.innerHTML = ''; if(!u.length) { b.innerHTML = '<tr><td colspan="3" class="p-3 text-center">No Data</td></tr>'; return; } u.forEach(x => { const del = (currentUser && x.username !== currentUser.username && x.username !== 'admin') ? `<button onclick="hapusData('deleteUser','${x.username}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>` : ''; b.innerHTML += `<tr class="border-b"><td class="p-3">${x.username}</td><td class="p-3">${x.nama}</td><td class="p-3 text-right">${del}</td></tr>`; }); }
-        async function changeMyPassword(e) { e.preventDefault(); if(!currentUser) return; const p = e.target.newPassword.value.trim(); showProgress("Password", "Mengupdate..."); const r = await fetch(`${GAS_API_URL}?action=changePassword`, { method: 'POST', body: JSON.stringify({username: currentUser.username, newPassword: p}) }).then(res=>res.json()); finishProgress(r.success, r.message); e.target.reset(); }
+        async function loadUsers() {
+            if(IS_DEMO) {
+                renderUsers(DEMO_DATA.users); return;
+            }
+            const u = await fetch(`${GAS_API_URL}?action=getUsers`).then(r=>r.json()); renderUsers(u);
+        }
+        function renderUsers(u) {
+            const b = document.getElementById('table-users-body'); b.innerHTML = '';
+            if(!u.length) { b.innerHTML = '<tr><td colspan="3" class="p-3 text-center">No Data</td></tr>'; return; }
+            u.forEach(x => { const del = (currentUser && x.username !== currentUser.username && x.username !== 'admin') ? `<button onclick="hapusData('deleteUser','${x.username}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>` : ''; b.innerHTML += `<tr class="border-b"><td class="p-3">${x.username}</td><td class="p-3">${x.nama}</td><td class="p-3 text-right">${del}</td></tr>`; });
+        }
+
+        async function changeMyPassword(e) { e.preventDefault(); if(!currentUser) return;
+            if(IS_DEMO) { alert("Mode Demo: Password tidak diubah."); return; }
+            const p = e.target.newPassword.value.trim(); showProgress("Password", "Mengupdate..."); const r = await fetch(`${GAS_API_URL}?action=changePassword`, { method: 'POST', body: JSON.stringify({username: currentUser.username, newPassword: p}) }).then(res=>res.json()); finishProgress(r.success, r.message); e.target.reset();
+        }
 
         function openModalWarga(id = null) {
             document.getElementById('modal-warga').querySelector('form').reset(); document.getElementById('title-modal-warga').innerText = "Tambah Warga"; document.getElementById('input-warga-id').value = "";
@@ -647,7 +991,7 @@ function getDashboardStats() {
         function copyCode() { const c=document.getElementById('code-gs-content'); c.select(); document.execCommand('copy'); alert("Tersalin!"); }
         
         document.addEventListener('click', e => { const s=document.getElementById('sidebar'); const b=e.target.closest('#sidebar-toggle-btn'); if(s.classList.contains('absolute') && !s.classList.contains('hidden') && !s.contains(e.target) && !b) toggleSidebar(); });
-        document.addEventListener('keydown', e => { if(e.key==="Escape") { const s=document.getElementById('sidebar'); if(s.classList.contains('absolute') && !s.classList.contains('hidden')) toggleSidebar(); closeModal('modal-login'); closeModal('modal-warga'); closeModal('modal-pengumuman'); closeModal('modal-bayar'); closeModal('modal-pengeluaran'); closeModal('modal-add-user'); } });
+        document.addEventListener('keydown', e => { if(e.key==="Escape") { const s=document.getElementById('sidebar'); if(s.classList.contains('absolute') && !s.classList.contains('hidden')) toggleSidebar(); closeModal('modal-login'); closeModal('modal-warga'); closeModal('modal-pengumuman'); closeModal('modal-bayar'); closeModal('modal-pengeluaran'); closeModal('modal-add-user'); closeModal('modal-setup'); closeModal('modal-input-url'); } });
     </script>
 </body>
 </html>
