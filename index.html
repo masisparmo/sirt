@@ -516,24 +516,25 @@ function getDashboardStats() {
         // --- MASTER DIRECTORY MOCK (Simulasi Google Sheet Pusat) ---
         // Format: { "id_rt": "url_gas" }
         // Dalam implementasi nyata, ini akan di-fetch dari JSON/CSV online
-        const MOCK_MASTER_DIR = {
-            "RT01-DEMO": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec",
-            "RT08-PPI": "https://script.google.com/macros/s/AKfycbw13I-yATL4RDK0KEdsitex54dAQ9Q9HTnDEQWs4HB_d6fO2_bp_LHilb5kIwz4TITP/exec" // Contoh mapping ke URL sama
-        };
+            // Ganti URL ini dengan URL Web App Master Anda dari Langkah 2
+const MASTER_API_URL = "https://script.google.com/macros/s/AKfycbyzsx8nT_NUFuMk3NrGwA5sB-wMOFRAgmqhkkFl28VBXIIHeWRZ2SnY9mG1CoqHZR--/exec";
 
-        async function fetchMasterDirectory(id) {
-            // Simulasi network delay
-            await new Promise(r => setTimeout(r, 800));
+async function fetchMasterDirectory(id) {
+    try {
+        // Ambil semua data ID dari Master Sheet
+        const response = await fetch(MASTER_API_URL);
+        const directory = await response.json();
 
-            const normalizedId = id.toUpperCase().trim();
-            if (MOCK_MASTER_DIR[normalizedId]) {
-                return MOCK_MASTER_DIR[normalizedId];
-            }
-            // Disini nanti logic fetch real ke Google Sheet Pusat Anda
-            // const dir = await fetch('URL_MASTER_SHEET_JSON').then(r=>r.json());
-            // return dir[normalizedId];
-            return null;
+        // Cari ID yang cocok
+        const normalizedId = id.toUpperCase().trim();
+        if (directory[normalizedId]) {
+            return directory[normalizedId];
         }
+    } catch (e) {
+        console.error("Gagal mengambil Master Directory", e);
+    }
+    return null; // ID tidak ditemukan
+}
 
         // MOCK DATA FOR DEMO
         const DEMO_DATA = {
