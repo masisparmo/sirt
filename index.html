@@ -1027,6 +1027,30 @@ function getDashboardStats() {
             if(IS_DEMO) { alert("Mode Demo: Konfigurasi tidak disimpan."); return; }
             const d = Object.fromEntries(new FormData(e.target).entries()); showProgress("Simpan", "Menyimpan..."); try { const r = await fetch(`${GAS_API_URL}?action=saveAppConfig`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json()); finishProgress(r.success, r.message); if(r.success) loadAllData(); } catch(e) { finishProgress(false, "Error"); }
         }
+        function openModalPengumuman(id = null) {
+            document.getElementById('modal-pengumuman').querySelector('form').reset();
+            document.getElementById('input-pengumuman-id').value = "";
+            document.getElementById('title-modal-pengumuman').innerText = "Buat Pengumuman";
+            quill.setContents([]);
+
+            if(id) {
+                const p = localPengumuman.find(x => x.id === id);
+                if(p) {
+                    document.getElementById('title-modal-pengumuman').innerText = "Edit Pengumuman";
+                    document.getElementById('input-pengumuman-id').value = p.id;
+                    document.getElementById('input-pengumuman-judul').value = p.judul;
+                    quill.clipboard.dangerouslyPasteHTML(p.isi);
+                }
+            }
+            openModal('modal-pengumuman');
+        }
+
+        async function submitPengumuman(e) {
+            e.preventDefault();
+            const id = document.getElementById('input-pengumuman-id').value;
+            await submitData(e, id ? 'editPengumuman' : 'simpanPengumuman');
+        }
+
         async function submitData(e, action) { e.preventDefault();
             if(IS_DEMO) {
                 alert("Mode Demo: Data tidak disimpan ke server.");
@@ -1035,6 +1059,8 @@ function getDashboardStats() {
                     const title = e.target.judul.value;
                     const content = quill.root.innerHTML;
                     DEMO_DATA.pengumuman.unshift({id:`P-${Date.now()}`, tanggal: "Hari Ini", judul: title, isi: content});
+                } else if (action === 'editPengumuman') {
+                    alert("Demo: Edit visual only");
                 } else if(action === 'simpanTagihan') {
                     const title = e.target.judul.value;
                     DEMO_DATA.tagihan.unshift({id:`BILL-${Date.now()}`, tanggal: "Hari Ini", judul: title, tipe: e.target.tipe.value, nominal: e.target.nominal.value, deadline: e.target.deadline.value});
