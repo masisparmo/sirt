@@ -609,6 +609,7 @@ function getDashboardStats() {
         let localWarga = [];
         let localTagihan = [];
         let localTransaksi = [];
+        let localPengumuman = [];
         let currentUser = null;
         let isWargaAuth = false;
         let currentPaidList = [];
@@ -873,6 +874,7 @@ function getDashboardStats() {
                 localWarga = warga;
                 localTagihan = tagihan;
                 localTransaksi = trans;
+                localPengumuman = pengumuman;
                 renderWarga(warga);
                 renderTransaksi(trans);
                 renderTagihan(tagihan);
@@ -901,6 +903,7 @@ function getDashboardStats() {
             localWarga = DEMO_DATA.warga;
             localTagihan = DEMO_DATA.tagihan;
             localTransaksi = DEMO_DATA.transaksi;
+            localPengumuman = DEMO_DATA.pengumuman;
             renderWarga(DEMO_DATA.warga);
             renderTransaksi(DEMO_DATA.transaksi);
             renderTagihan(DEMO_DATA.tagihan);
