@@ -1321,7 +1321,7 @@ function getDashboardStats() {
                 <div class="bg-white p-6 rounded-xl border border-slate-100 mb-4 shadow-sm relative hover:shadow-md transition">
                     <h4 class="font-bold text-xl text-blue-800 pr-8 mb-1">${item.judul}</h4>
                     <p class="text-xs text-gray-400 mb-4 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.tanggal}</p>
-                    <div class="prose max-w-none text-gray-700 text-sm ql-editor" style="padding:0;min-height:auto;">${item.isi}</div>
+                    <div class="prose max-w-none text-gray-700 text-sm ql-editor" style="padding:0; min-height:auto; height:auto !important; overflow:visible !important;">${item.isi}</div>
                     ${actions}
                 </div>`;
 
@@ -1335,7 +1335,7 @@ function getDashboardStats() {
                                 <h4 class="font-bold text-xl text-slate-800">${item.judul}</h4>
                                 <p class="text-xs text-gray-400 mt-1 flex items-center gap-1"><i class="fa-regular fa-clock"></i> ${item.tanggal}</p>
                             </div>
-                            <div class="prose max-w-none text-gray-700 text-sm ql-editor" style="padding:0;min-height:auto;">${item.isi}</div>
+                            <div class="prose max-w-none text-gray-700 text-sm ql-editor" style="padding:0; min-height:auto; height:auto !important; overflow:visible !important;">${item.isi}</div>
                         </div>`;
                     } else {
                         const tempDiv = document.createElement("div"); tempDiv.innerHTML = item.isi; let plainText = tempDiv.textContent || tempDiv.innerText || ""; let snippet = plainText.length > 100 ? plainText.substring(0, 100) + "..." : plainText; let hasImage = item.isi.includes('<img'); let icon = hasImage ? '<i class="fa-regular fa-image text-gray-400 ml-1"></i>' : '';
