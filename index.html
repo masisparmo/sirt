@@ -313,11 +313,11 @@
 
                         <div class="relative pl-8 border-l-4 border-blue-500">
                             <div class="absolute -left-3 top-0 bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                            <h3 class="font-bold text-lg text-slate-800">Pasang Kode Backend (V20 - Payment Status)</h3>
+                            <h3 class="font-bold text-lg text-slate-800">Pasang Kode Backend (V21 - Edit Tagihan)</h3>
                             <p class="text-sm text-gray-600 mt-1 mb-2">Buka menu <b>Ekstensi (Extensions) > Apps Script</b> di Google Sheet Anda. Hapus semua kode yang ada, lalu <b>SALIN SEMUA KODE DI BAWAH INI</b> dan tempelkan ke sana.</p>
                             <div class="code-container">
                                 <textarea id="code-gs-content" class="code-textarea" readonly>
-/** SISTEM INFORMASI RT - API BACKEND V20 (PAYMENT STATUS) **/
+/** SISTEM INFORMASI RT - API BACKEND V21 (EDIT TAGIHAN) **/
 
 function doGet(e) { return handleRequest(e); }
 function doPost(e) { return handleRequest(e); }
@@ -356,6 +356,7 @@ function handleRequest(e) {
     else if (action === "hapusTransaksi") { const d = JSON.parse(e.postData.contents); result = hapusTransaksi(d); }
     
     else if (action === "simpanTagihan") { const d = JSON.parse(e.postData.contents); result = simpanTagihan(d); }
+    else if (action === "editTagihan") { const d = JSON.parse(e.postData.contents); result = editTagihan(d); }
     else if (action === "hapusTagihan") { const d = JSON.parse(e.postData.contents); result = hapusTagihan(d); }
 
     else if (action === "simpanPengumuman") { const d = JSON.parse(e.postData.contents); result = tambahPengumuman(d); }
@@ -452,6 +453,13 @@ function getTagihanData() {
   return data.map(row => ({ id: row[0], tanggal: formatDateSafe(row[1]), judul: row[2], tipe: row[3], nominal: row[4], deadline: formatDateSafe(row[5]) }));
 }
 function simpanTagihan(d) { getSheetByName('Tagihan').appendRow(['BILL-'+new Date().getTime(), new Date(), d.judul, d.tipe, d.nominal||0, d.deadline]); return {success:true, message:"Sukses"}; }
+function editTagihan(d) {
+  const sheet = getSheetByName('Tagihan'); const rows = sheet.getDataRange().getValues();
+  for(let i=1; i<rows.length; i++) { if(rows[i][0] == d.id) {
+    sheet.getRange(i+1, 3).setValue(d.judul); sheet.getRange(i+1, 4).setValue(d.tipe); sheet.getRange(i+1, 5).setValue(d.nominal||0); sheet.getRange(i+1, 6).setValue(d.deadline);
+    return {success:true, message:"Sukses"};
+  }} return {success:false, message:"ID not found"};
+}
 function hapusTagihan(d) {
   const sheet = getSheetByName('Tagihan'); const rows = sheet.getDataRange().getValues();
   for(let i=1; i<rows.length; i++) { if(rows[i][0] == d.id) { sheet.deleteRow(i+1); return {success:true, message:"Sukses"}; }} return {success:false};
@@ -575,7 +583,7 @@ function getDashboardStats() {
 
     <div id="modal-warga" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"><div class="bg-white rounded-xl w-full max-w-md p-6"><h3 class="font-bold text-lg mb-4" id="title-modal-warga">Tambah Warga</h3><form onsubmit="submitWarga(event)"><input type="hidden" name="id" id="input-warga-id"><input name="nama" id="input-warga-nama" type="text" placeholder="Nama Lengkap" required class="w-full mb-3 p-2 border rounded"><input name="noRumah" id="input-warga-rumah" type="text" placeholder="Blok / No Rumah" required class="w-full mb-3 p-2 border rounded"><input name="noHp" id="input-warga-hp" type="text" placeholder="No HP/WA (08xxx)" class="w-full mb-3 p-2 border rounded"><input name="email" id="input-warga-email" type="email" placeholder="Email" class="w-full mb-3 p-2 border rounded"><div class="grid grid-cols-2 gap-4"><input name="jmlAnggota" id="input-warga-anggota" type="number" placeholder="Jml Anggota" value="1" class="w-full mb-4 p-2 border rounded"><input name="tarif" id="input-warga-tarif" type="number" placeholder="Iuran Bulanan (Rp)" class="w-full mb-4 p-2 border rounded"></div><div class="flex justify-end gap-2"><button type="button" onclick="closeModal('modal-warga')" class="px-4 py-2 text-gray-600">Batal</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button></div></form></div></div>
 
-    <div id="modal-tagihan" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"><div class="bg-white rounded-xl w-full max-w-md p-6"><h3 class="font-bold text-lg mb-4 text-blue-800">Buat Tagihan Baru</h3><form onsubmit="submitData(event, 'simpanTagihan')"><input name="judul" type="text" placeholder="Judul (Misal: Iuran Maret 2024)" required class="w-full mb-3 p-2 border rounded font-bold"><div class="grid grid-cols-2 gap-4 mb-3"><div><label class="text-xs font-bold text-gray-500">Tipe Iuran</label><select name="tipe" id="input-tipe-tagihan" onchange="toggleNominalInput()" class="w-full p-2 border rounded"><option value="Bulanan">Bulanan (Sesuai Tarif Warga)</option><option value="Flat">Flat (Sama Rata)</option></select></div><div><label class="text-xs font-bold text-gray-500">Deadline</label><input name="deadline" type="date" required class="w-full p-2 border rounded"></div></div><input name="nominal" id="input-nominal-tagihan" type="number" placeholder="Nominal Flat (Rp)" class="w-full mb-4 p-2 border rounded hidden"><div class="flex justify-end gap-2"><button type="button" onclick="closeModal('modal-tagihan')" class="px-4 py-2 text-gray-600">Batal</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan & Publikasikan</button></div></form></div></div>
+    <div id="modal-tagihan" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"><div class="bg-white rounded-xl w-full max-w-md p-6"><h3 class="font-bold text-lg mb-4 text-blue-800" id="title-modal-tagihan">Buat Tagihan Baru</h3><form onsubmit="submitTagihan(event)"><input type="hidden" name="id" id="input-tagihan-id"><input name="judul" id="input-tagihan-judul" type="text" placeholder="Judul (Misal: Iuran Maret 2024)" required class="w-full mb-3 p-2 border rounded font-bold"><div class="grid grid-cols-2 gap-4 mb-3"><div><label class="text-xs font-bold text-gray-500">Tipe Iuran</label><select name="tipe" id="input-tipe-tagihan" onchange="toggleNominalInput()" class="w-full p-2 border rounded"><option value="Bulanan">Bulanan (Sesuai Tarif Warga)</option><option value="Flat">Flat (Sama Rata)</option></select></div><div><label class="text-xs font-bold text-gray-500">Deadline</label><input name="deadline" id="input-tagihan-deadline" type="date" required class="w-full p-2 border rounded"></div></div><input name="nominal" id="input-nominal-tagihan" type="number" placeholder="Nominal Flat (Rp)" class="w-full mb-4 p-2 border rounded hidden"><div class="flex justify-end gap-2"><button type="button" onclick="closeModal('modal-tagihan')" class="px-4 py-2 text-gray-600">Batal</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan & Publikasikan</button></div></form></div></div>
 
     <div id="modal-pengumuman" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4"><div class="bg-white rounded-xl w-full max-w-2xl p-6"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg">Buat Pengumuman</h3><button onclick="handleImageUpload()" class="text-xs bg-slate-200 px-3 py-1 rounded hover:bg-slate-300 font-bold flex items-center gap-2"><i class="fa-solid fa-image"></i> Sisipkan Gambar (HTML/Link)</button></div><form onsubmit="submitData(event, 'simpanPengumuman')"><input name="judul" type="text" placeholder="Judul Pengumuman" required class="w-full mb-3 p-2 border rounded font-bold"><div id="editor-container" class="bg-white mb-4"></div><input type="hidden" name="isi" id="input-isi-pengumuman"><div class="flex justify-end gap-2 mt-4"><button type="button" onclick="closeModal('modal-pengumuman')" class="px-4 py-2 text-gray-600">Batal</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Terbitkan</button></div></form></div></div>
 
@@ -1099,7 +1107,8 @@ function getDashboardStats() {
 
             const f = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
             data.forEach(item => {
-                const del = `<button onclick="hapusData('hapusTagihan', '${item.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>`;
+                const del = `<button onclick="hapusData('hapusTagihan', '${item.id}')" class="text-red-500 hover:text-red-700 ml-2" title="Hapus"><i class="fa-solid fa-trash"></i></button>`;
+                const edit = `<button onclick="openModalTagihan('${item.id}')" class="text-blue-500 hover:text-blue-700" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>`;
 
                 // Status Logic
                 const deadlineDate = new Date(item.deadline.split('/').reverse().join('-'));
@@ -1109,7 +1118,7 @@ function getDashboardStats() {
 
                 const nominalDisplay = item.tipe === 'Flat' ? f.format(item.nominal) : 'Sesuai Tarif';
 
-                b.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4 font-bold text-slate-700">${item.judul}</td><td class="p-4 text-xs">${item.tipe}<br>${nominalDisplay}</td><td class="p-4 text-xs">${item.deadline}</td><td class="p-4 text-center">${statusBadge}</td><td class="p-4 text-right">${del}</td></tr>`;
+                b.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4 font-bold text-slate-700">${item.judul}</td><td class="p-4 text-xs">${item.tipe}<br>${nominalDisplay}</td><td class="p-4 text-xs">${item.deadline}</td><td class="p-4 text-center">${statusBadge}</td><td class="p-4 text-right">${edit} ${del}</td></tr>`;
 
                 // Add to dropdowns
                 const opt = document.createElement('option'); opt.value = item.id; opt.text = item.judul; s.appendChild(opt);
@@ -1124,6 +1133,43 @@ function getDashboardStats() {
             const type = document.getElementById('input-tipe-tagihan').value;
             const input = document.getElementById('input-nominal-tagihan');
             if(type === 'Flat') input.classList.remove('hidden'); else input.classList.add('hidden');
+        }
+
+        function openModalTagihan(id = null) {
+            document.getElementById('modal-tagihan').querySelector('form').reset();
+            document.getElementById('input-tagihan-id').value = "";
+            document.getElementById('title-modal-tagihan').innerText = "Buat Tagihan Baru";
+            document.getElementById('input-nominal-tagihan').classList.add('hidden');
+
+            if(id) {
+                const t = localTagihan.find(x => x.id === id);
+                if(t) {
+                    document.getElementById('title-modal-tagihan').innerText = "Edit Tagihan";
+                    document.getElementById('input-tagihan-id').value = t.id;
+                    document.getElementById('input-tagihan-judul').value = t.judul;
+                    document.getElementById('input-tipe-tagihan').value = t.tipe;
+
+                    // Format Date for Input Date (YYYY-MM-DD)
+                    // Assuming t.deadline is DD/MM/YYYY
+                    const parts = t.deadline.split('/');
+                    if(parts.length === 3) {
+                        const dateIso = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                        document.getElementById('input-tagihan-deadline').value = dateIso;
+                    }
+
+                    if(t.tipe === 'Flat') {
+                        document.getElementById('input-nominal-tagihan').classList.remove('hidden');
+                        document.getElementById('input-nominal-tagihan').value = t.nominal;
+                    }
+                }
+            }
+            openModal('modal-tagihan');
+        }
+
+        async function submitTagihan(e) {
+            e.preventDefault();
+            const id = document.getElementById('input-tagihan-id').value;
+            await submitData(e, id ? 'editTagihan' : 'simpanTagihan');
         }
 
         function autoFillNominal() {
