@@ -165,8 +165,14 @@
                         </form>
                     </div>
                     <div id="warga-data-container" class="hidden bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-gray-100 bg-slate-50 flex gap-2 items-center overflow-x-auto">
+            <label class="text-sm font-bold text-slate-600 whitespace-nowrap"><i class="fa-regular fa-calendar-check mr-1"></i> Cek Iuran:</label>
+            <select id="filter-bulan" onchange="loadStatusIuran()" class="p-2 border rounded text-sm bg-white min-w-[100px]"></select>
+            <select id="filter-tahun" onchange="loadStatusIuran()" class="p-2 border rounded text-sm bg-white min-w-[80px]"></select>
+            <button onclick="loadStatusIuran()" class="bg-white border border-gray-300 text-slate-600 px-3 py-2 rounded text-xs hover:bg-slate-100" title="Refresh"><i class="fa-solid fa-rotate"></i></button>
+        </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600 uppercase text-xs"><tr><th class="p-4">Nama</th><th class="p-4">Blok/Rumah</th><th class="p-4">Anggota</th><th class="p-4">WA/Telp</th><th class="p-4">Email</th><th class="p-4 admin-only">Aksi</th></tr></thead><tbody id="table-warga-body" class="divide-y divide-gray-100"></tbody></table>
+            <table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600 uppercase text-xs"><tr><th class="p-4">Nama</th><th class="p-4">Blok/Rumah</th><th class="p-4">Anggota</th><th class="p-4">WA/Telp</th><th class="p-4 text-center">Status Iuran</th><th class="p-4">Email</th><th class="p-4 admin-only">Aksi</th></tr></thead><tbody id="table-warga-body" class="divide-y divide-gray-100"></tbody></table>
                         </div>
                     </div>
                 </div>
@@ -339,6 +345,7 @@ function handleRequest(e) {
     else if (action === "login") { const d = JSON.parse(e.postData.contents); result = loginUser(d); }
     else if (action === "saveAppConfig") { const d = JSON.parse(e.postData.contents); result = saveAppConfig(d); }
     else if (action === "getAdminConfig") { result = getAdminConfig(); }
+    else if (action === "cekStatusIuran") { const d = JSON.parse(e.postData.contents); result = cekStatusIuran(d); }
 
     // DATA WRITES
     else if (action === "simpanWarga") { const d = JSON.parse(e.postData.contents); result = tambahWarga(d); }
@@ -452,6 +459,17 @@ function hapusTagihan(d) {
 
 function getAppConfig() { const d=getSheetByName('AppConfig').getDataRange().getValues(); d.shift(); const c={}; d.forEach(r=>{if(r[0]!=='warga_code')c[r[0]]=r[1]}); return c; }
 function getAdminConfig() { const d=getSheetByName('AppConfig').getDataRange().getValues(); d.shift(); const c={}; d.forEach(r=>{c[r[0]]=r[1]}); return c; }
+function cekStatusIuran(d) {
+  const sheet = getSheetByName('Transaksi'); const rows = sheet.getDataRange().getValues();
+  const keyword = ("Iuran " + d.bulan + " " + d.tahun).toLowerCase();
+  const paid = [];
+  for(let i=1; i<rows.length; i++) {
+     if(String(rows[i][3]).toLowerCase().includes(keyword) || String(rows[i][5]).toLowerCase().includes(keyword)) {
+       paid.push(rows[i][2]);
+     }
+  }
+  return {success:true, data: paid};
+}
 function verifyWargaCode(c) {
   const d=getSheetByName('AppConfig').getDataRange().getValues(); d.shift(); let correct='12345';
   const r=d.find(x=>x[0]==='warga_code'); if(r) correct=r[1].toString();
@@ -577,6 +595,7 @@ function getDashboardStats() {
         let localTransaksi = [];
         let currentUser = null;
         let isWargaAuth = false;
+        let currentPaidList = [];
         var quill;
 
         // --- MASTER DIRECTORY ---
@@ -656,9 +675,28 @@ function getDashboardStats() {
 
         window.onload = async function() {
             quill = new Quill('#editor-container', { theme: 'snow', modules: { toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]] }, placeholder: 'Tulis isi pengumuman...' });
-
+            initFilterDate();
             await initApp();
         };
+
+        function initFilterDate() {
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const mSelect = document.getElementById('filter-bulan');
+            const ySelect = document.getElementById('filter-tahun');
+            const now = new Date();
+
+            months.forEach(m => {
+                const opt = document.createElement('option'); opt.value = m; opt.text = m;
+                if(m === months[now.getMonth()]) opt.selected = true;
+                mSelect.appendChild(opt);
+            });
+
+            const currentYear = now.getFullYear();
+            for(let y = currentYear; y >= currentYear - 2; y--) {
+                const opt = document.createElement('option'); opt.value = y; opt.text = y;
+                ySelect.appendChild(opt);
+            }
+        }
 
         async function initApp() {
             // 1. Cek URL Parameter (?id=...)
@@ -823,6 +861,7 @@ function getDashboardStats() {
                 renderTransaksi(trans);
                 renderTagihan(tagihan);
                 renderMonitoring();
+                loadStatusIuran();
 
                 if(init) closeProgress();
             } catch(e) {
@@ -1020,13 +1059,20 @@ function getDashboardStats() {
 
         function renderWarga(d) {
             const b = document.getElementById('table-warga-body'); const s = document.getElementById('select-warga'); b.innerHTML = ''; s.innerHTML = '<option value="">-- Pilih --</option>';
-            if(!d || !d.length) { b.innerHTML = '<tr><td colspan="6" class="p-4 text-center">Kosong</td></tr>'; return; }
+            if(!d || !d.length) { b.innerHTML = '<tr><td colspan="7" class="p-4 text-center">Kosong</td></tr>'; return; }
             const f = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
             d.forEach(w => {
                 let wa = '-'; if(w.hp) { let c = String(w.hp).replace(/\D/g, ''); if(c.startsWith('0')) c = '62'+c.slice(1); wa = `<a href="https://wa.me/${c}" target="_blank" class="text-green-600 font-bold flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> ${w.hp}</a>`; }
                 const act = `<div class="flex gap-2 admin-only"><button onclick="openModalWarga('${w.id}')" class="text-blue-600"><i class="fa-solid fa-pen"></i></button><button onclick="hapusData('hapusWarga', '${w.id}')" class="text-red-600"><i class="fa-solid fa-trash"></i></button></div>`;
                 const tarifDisplay = w.tarif ? `<br><span class="text-[10px] text-gray-500 bg-gray-100 px-1 rounded">Iuran: ${f.format(w.tarif)}</span>` : '';
-                b.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4">${w.nama}${tarifDisplay}</td><td class="p-4">${w.rumah}</td><td class="p-4">${w.anggota}</td><td class="p-4">${wa}</td><td class="p-4 text-sm text-gray-500">${w.email||'-'}</td><td class="p-4">${act}</td></tr>`;
+
+                // Status Iuran
+                const isPaid = currentPaidList.includes(w.nama);
+                const btnBayar = `<button onclick="bayarIuranCepat('${w.id}', '${w.nama}', ${w.tarif||0})" class="bg-white hover:bg-slate-100 text-slate-600 border border-slate-300 px-3 py-1 rounded text-xs font-bold transition flex items-center gap-1 mx-auto shadow-sm"><i class="fa-solid fa-hand-holding-dollar"></i> Bayar</button>`;
+                const badgeLunas = `<span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold border border-green-200"><i class="fa-solid fa-check"></i> Lunas</span>`;
+                const statusHtml = isPaid ? badgeLunas : btnBayar;
+
+                b.innerHTML += `<tr class="border-b hover:bg-slate-50"><td class="p-4">${w.nama}${tarifDisplay}</td><td class="p-4">${w.rumah}</td><td class="p-4">${w.anggota}</td><td class="p-4">${wa}</td><td class="p-4 text-center">${statusHtml}</td><td class="p-4 text-sm text-gray-500">${w.email||'-'}</td><td class="p-4">${act}</td></tr>`;
                 const o = document.createElement('option'); o.value = w.nama; o.text = `${w.nama} (${w.rumah})`; s.appendChild(o);
             });
         }
@@ -1228,6 +1274,51 @@ function getDashboardStats() {
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
         function toggleLogin() { openModal('modal-login'); }
         function copyCode() { const c=document.getElementById('code-gs-content'); c.select(); document.execCommand('copy'); alert("Tersalin!"); }
+
+        async function loadStatusIuran() {
+             const bulan = document.getElementById('filter-bulan').value;
+             const tahun = document.getElementById('filter-tahun').value;
+             if(!bulan || !tahun) return;
+
+             if(IS_DEMO) {
+                 currentPaidList = DEMO_DATA.transaksi.filter(t => t.keterangan && t.keterangan.includes(bulan) && t.keterangan.includes(tahun)).map(t => t.nama);
+                 renderWarga(localWarga);
+                 return;
+             }
+
+             try {
+                 const r = await fetch(`${GAS_API_URL}?action=cekStatusIuran`, { method: 'POST', body: JSON.stringify({bulan: bulan, tahun: tahun}) }).then(res => res.json());
+                 if(r.success) { currentPaidList = r.data || []; renderWarga(localWarga); }
+             } catch(e) { console.error(e); }
+        }
+
+        async function bayarIuranCepat(id, nama, tarif) {
+            const bulan = document.getElementById('filter-bulan').value;
+            const tahun = document.getElementById('filter-tahun').value;
+            const f = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+            if(!confirm(`Catat pembayaran iuran ${bulan} ${tahun} untuk ${nama} sebesar ${f.format(tarif)}?`)) return;
+
+            const d = { pembayar: nama, nominal: tarif, keterangan: `Iuran ${bulan} ${tahun}`, jenisIuran: 'Iuran Warga', tipe: 'Masuk' };
+
+            if(IS_DEMO) {
+                alert("Mode Demo: Pembayaran tercatat!");
+                DEMO_DATA.transaksi.push({ id: `T-${Date.now()}`, tanggal: "Hari Ini", nama: nama, jenis: "Iuran Warga", nominal: tarif, keterangan: `Iuran ${bulan} ${tahun}`, tipe: "Masuk" });
+                loadStatusIuran();
+                return;
+            }
+
+            showProgress("Menyimpan", "Mencatat pembayaran...");
+            try {
+                const r = await fetch(`${GAS_API_URL}?action=simpanTransaksi`, { method: 'POST', body: JSON.stringify(d) }).then(res=>res.json());
+                finishProgress(r.success, r.message);
+                if(r.success) {
+                    loadStatusIuran();
+                    loadAllData(); // Refresh financials
+                }
+            } catch(e) {
+                finishProgress(false, "Gagal koneksi");
+            }
+        }
         
         document.addEventListener('click', e => { const s=document.getElementById('sidebar'); const b=e.target.closest('#sidebar-toggle-btn'); if(s.classList.contains('absolute') && !s.classList.contains('hidden') && !s.contains(e.target) && !b) toggleSidebar(); });
         document.addEventListener('keydown', e => { if(e.key==="Escape") { const s=document.getElementById('sidebar'); if(s.classList.contains('absolute') && !s.classList.contains('hidden')) toggleSidebar(); closeModal('modal-login'); closeModal('modal-warga'); closeModal('modal-pengumuman'); closeModal('modal-bayar'); closeModal('modal-pengeluaran'); closeModal('modal-add-user'); closeModal('modal-setup'); closeModal('modal-input-url'); } });
